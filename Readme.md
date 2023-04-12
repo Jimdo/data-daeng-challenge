@@ -6,56 +6,74 @@ The data engineering team at Jimdo needs to:
 - Deliver it to our stakeholders
 
 In this exercise, we want to pull data from our Website Statistics API and
-provide a new table  `dash.statistics` that allows to query the statistics data.  
+provide a new table `dash.statistics` that allows to query the statistics data.  
 
+Your tasks:
 
 - [ ] Query the statistics data from the API endpoint
 - [ ] Design the table structure with our use case in mind (see below)
-- [ ] Write the DDL to create the table(s) 
 - [ ] Ingest the data in the table structure you've designed
 - [ ] Query the database you created
 
 
-### Setup 
+## Setup 
 
 Expected tools
 
-- Docker
+- Docker, docker-compose
 - Python environment
-- SQL 
+- SQL client
+- curl, jq
 
-In this challenge, the expectation is you already have installed docker on your machine. Otherwise, please check this [documentation](https://docs.docker.com/get-docker/ )  to install the docker.
-Before start writing the ETL pipeline you need to start the 2 docker services `postgres-db` and `dash_statistics_service`
-via 
-
-`docker-compose up --build` 
-
-This will run two service 
+This will run two services
 `postgres-db: host: postgres port=5432 database: dwh  user: postgres`
 `dash_statistics_service: host: 0.0.0.0 port: 5000 endpoint: /v1/dash/statistics` 
 
+```bash
+make start
+```
 
+You can query this API and view the returned data with this command.
 
+```bash
+make query-api
+```
 
-# Challenge
+## Challenge
 
 Use case: 
 
 We want to identify all websites that have more direct visits than visits from
 all other sources i.e. (facebook,google) combined.
 
+### 1) Query the statistics data from the API endpoint
 
+In `etl_job/app/main.py`, write the Python code needed to fetch results from the API.
 
-## 1) To create ETL Pipeline 
+```text
+http://localhost:5000/v1/dash/statistics
+```
 
-In this part, you have to create a small ETL pipeline that gets websites `statistics` data from `dash` API. 
-host: `localhost:5000` endpoint: `/v1/dash/statistics` 
+You can execute the ETL job by running:
 
-1. Extract data from API endpoint  
-2. Load the, extracted data to PostgreSQL 
-3. You need to create First Schema `dash` and Table  `statistics` for this data 
+```bash
+make run
+```
 
-The API returns the list of JSON objects in the following format:
+### 2) Design the table structure with the use-case in mind
+
+Remember:
+> We want to identify all websites that have more direct visits than visits from all other sources i.e. (facebook,google) combined.
+
+```SQL
+create table dash.statistics (
+  website_id uuid,
+  date date,
+  ...
+);
+```
+
+Here's the API result for convenience:
 
 ```json
 {
@@ -78,40 +96,22 @@ The API returns the list of JSON objects in the following format:
 }
 ```
 
-You can connect to any Database tool like DBeaver or can use this script to 
-` docker exec -it postgres psql -U Postgres -d dwh` 
-and connect to psql inside the postgres container.
-Now you can create your schema and table according to the response data.
+### 3) Ingest data into the newly created table using Python
 
+You'll need to transform the API data into the format matching your designed `dash.statistics` table.
 
+You can execute the ETL job by running:
 
-We have created a folder for your ETL pipeline in `etl_job`.  We have created Python Projectwith  as a quick start for you but you are free to choose any language which you are comfortable most.
-this directory has following structure
- 
-
-```
-etl_job:
-    - app
-        - main.py
-    - Dockerfile
-    - requirements.txt
+```bash
+make run
 ```
 
+### 4) Query your table to answer the use-case
 
-### Run etl_job locally
+Remember:
+> We want to identify all websites that have more direct visits than visits from all other sources i.e. (facebook,google) combined.
 
-We have  already setup Dockerfile for the python job you need to build it and run it locally to check the results 
-`docker build -t my_job:latest . `
-
-`docker run --name dash_statistic_job  my_job:latest `
-
-
-,
-## 2) Query from Database
-In this part, we are expecting to write SQL queries:
-
-`Select all websites which have more direct visits than all the other sources i.e. (facebook,google) combined`
  
- 
-##Evaluation:
-In the end, you'll be evaluated based on your DDL statement, python code and SQL Query.
+## Evaluation
+
+In the end, you'll be evaluated based on your DDL statement, Python code and the SQL Query.

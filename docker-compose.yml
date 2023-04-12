@@ -1,17 +1,18 @@
+---
 version: '3'
 services:
-    dash_statistics_service:
-      build: dash_statistics_service/.
-      ports:
+  dash_statistics_service:
+    build: dash_statistics_service/.
+    ports:
       - 5000:5000
 
-    postgres:
-      image: postgres:latest
-      container_name: postgres
-      restart: always
-      env_file:
-        - postgres-db/scripts/database.env
-      ports:
-        - '5432:5432'
-      volumes:
-        - ./postgres-db/postgres-data:/var/lib/postgresql/data
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    env_file:
+      - postgres-db/scripts/database.env
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres-db/postgres-data:/var/lib/postgresql/data

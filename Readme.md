@@ -1,14 +1,20 @@
 # Data Engineering Test
 
-We as a data engineering team at Jimdo gather data from various sources, transform the collected data and deliver it to our stakeholders.
-We collect a lot of data from various APIs, 3rd party sources and our own backend databases and tracking systems. We then process it, transform it and load it to our data warehouse.
+The data engineering team at Jimdo needs to: 
+- Gather data from various sources
+- Transform the collected data
+- Deliver it to our stakeholders
 
-We were tasked to ingest data from our Statistics API. We want to create a new table `dash.statistics` in our data warehouse, which populates the data from our `dash` API. Our expectation for this test is to write an ETL Pipeline that fetches data from the dash API endpoint (provided), create DDL statement and able to query from our new table.
+In this exercise, we want to pull data from our Website Statistics API and
+provide a new table  `dash.statistics` that allows to query the statistics data.  
+
 
 - [ ] Query the statistics data from the API endpoint
-- [ ] Design the table structure with the Query below in mind
+- [ ] Design the table structure with our use case in mind (see below)
+- [ ] Write the DDL to create the table(s) 
 - [ ] Ingest the data in the table structure you've designed
 - [ ] Query the database you created
+
 
 ### Setup 
 
@@ -32,6 +38,13 @@ This will run two service
 
 
 # Challenge
+
+Use case: 
+
+We want to identify all websites that have more direct visits than visits from
+all other sources i.e. (facebook,google) combined.
+
+
 
 ## 1) To create ETL Pipeline 
 

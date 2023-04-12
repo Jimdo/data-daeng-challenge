@@ -1,13 +1,23 @@
 # Data Engineering Test
 
 We as a data engineering team at Jimdo gather data from various sources, transform the collected data and deliver it to our stakeholders.
-We collect a lot of data from various APIs, 3rd party sources and our own backend databases and tracking systems. We then process it, transform it and load it to our data-warehouse.
+We collect a lot of data from various APIs, 3rd party sources and our own backend databases and tracking systems. We then process it, transform it and load it to our data warehouse.
 
-We want to create a new table `dash.statistics` in our datawarehouse, which populates the data from our `dash` API. 
-Our expectation for this test is to write an ETL Pipeline that fetches data from the dash API endpoint, create DDL statement and able to query from our new table.
+We were tasked to ingest data from our Statistics API. We want to create a new table `dash.statistics` in our data warehouse, which populates the data from our `dash` API. Our expectation for this test is to write an ETL Pipeline that fetches data from the dash API endpoint (provided), create DDL statement and able to query from our new table.
 
+- [ ] Query the statistics data from the API endpoint
+- [ ] Design the table structure with the Query below in mind
+- [ ] Ingest the data in the table structure you've designed
+- [ ] Query the database you created
 
 ### Setup 
+
+Expected tools
+
+- Docker
+- Python environment
+- SQL 
+
 In this challenge, the expectation is you already have installed docker on your machine. Otherwise, please check this [documentation](https://docs.docker.com/get-docker/ )  to install the docker.
 Before start writing the ETL pipeline you need to start the 2 docker services `postgres-db` and `dash_statistics_service`
 via 
@@ -33,27 +43,20 @@ host: `localhost:5000` endpoint: `/v1/dash/statistics`
 3. You need to create First Schema `dash` and Table  `statistics` for this data 
 
 The API returns the list of JSON objects in the following format:
-```
+
+```json
 {
     "statistics": [
         {
-            "clicked_booking_button": 8,
+            "website_id": "4149179c-3745-46be-a4d9-c9b92b0f378d",
             "date": "2022-01-27",
-            "engaged_visitors": 28,
-            "sent_contact_form": 8,
             "sources": {
                 "direct": 43,
                 "facebook": 17,
                 "google": 25
             },
-            "top_pages": {
-                "/": 68,
-                "/about": 25,
-                "/privacy-policy": 17
-            },
             "visitors": 86,
             "visits": 103,
-            "website_id": "4149179c-3745-46be-a4d9-c9b92b0f378d"
         },
         ....
         ....
@@ -61,6 +64,7 @@ The API returns the list of JSON objects in the following format:
     ]
 }
 ```
+
 You can connect to any Database tool like DBeaver or can use this script to 
 ` docker exec -it postgres psql -U Postgres -d dwh` 
 and connect to psql inside the postgres container.
@@ -93,7 +97,7 @@ We have  already setup Dockerfile for the python job you need to build it and ru
 ## 2) Query from Database
 In this part, we are expecting to write SQL queries:
 
-`Select all website which has more direct visits than other sources i.e. (facebook,google) `
+`Select all websites which have more direct visits than all the other sources i.e. (facebook,google) combined`
  
  
 ##Evaluation:

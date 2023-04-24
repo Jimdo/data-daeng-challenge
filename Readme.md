@@ -63,7 +63,8 @@ make run
 ### 2) Design the table structure with the use-case in mind
 
 Remember:
-> We want to identify all websites that have more direct visits than visits from all other sources i.e. (facebook,google) combined.
+> We want to identify all websites that have more direct visits than visits from all other sources i.e. (facebook,google) combined. 
+See [Task 4](#4-query-your-table-to-answer-the-use-case)
 
 ```SQL
 create table dash.statistics (
@@ -108,8 +109,15 @@ make run
 
 ### 4) Query your table to answer the use-case
 
-Remember:
-> We want to identify all websites that have more direct visits than visits from all other sources i.e. (facebook,google) combined.
+Write a query to identify all websites that have more direct visits than visits from all other sources i.e. (facebook,google) combined.
+
+> Note: The key `sources` in the statistics object is a nested json of key-value pairs, where the key is the name of the source and value is the number of visits coming from that source.
+
+Example:
+- For the sample JSON response;
+    - number of visits from the `direct` source is 43
+    - number of visits from `other` sources (facebook & google here) is 42 (17 + 25)
+    - This satisfies the condition: 43 (direct) > 42 (other)
 
  
 ## Evaluation
